@@ -5,9 +5,11 @@ const { Category, Product } = require("../../models");
 
 router.get("/", async (req, res) => {
   try {
-    const categoryData = await Category.findAll(include[{model:Product}]);
+    const categoryData = await Category.findAll({
+      include: [{ model: Product }],
+    });
     if (!categoryData) {
-      res.status(404).json({ message: `No categories found!` });
+      res.status(404).json({ message: "No categories found." });
       return;
     }
     res.status(200).json(categoryData);
@@ -17,14 +19,14 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  
-});
-
-router.post("/", async (req, res) => {
   try {
-    const categoryData = await Category.create(req.body);
+    const categoryData = await Category.findByPk(req.params.id, {
+      include: [{ model: Product }],
+    });
     if (!categoryData) {
-      res.status(404).json({ message: `Input is not valid` });
+      res.status(404).json({
+        message: "Im afraid I cant let you do that, the ID is incorrect.",
+      });
       return;
     }
     res.status(200).json(categoryData);
